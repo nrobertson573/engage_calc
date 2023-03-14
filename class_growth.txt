@@ -1,0 +1,55 @@
+Name 	HP 	Str 	Mag 	Dex 	Spd 	Def 	Res 	Lck 	Bld
+Dragon Child 	10 	10 	  	10 	15 	10 	10 	5 	5
+Divine Dragon 	10 	10 	  	10 	15 	15 	15 	10 	5
+Fell Child (V) 	10 	10 	25 	10 	5 	10 	25 	  	 
+Noble (A) 	15 	15 	  	5 	5 	20 	5 	15 	 
+Avenir 	15 	15 	  	5 	10 	25 	5 	20 	5
+Noble (C) 	  	5 	10 	5 	5 	5 	10 	20 	 
+Vidame 	5 	10 	15 	5 	5 	5 	15 	20 	 
+Lord (D) 	15 	20 	  	10 	10 	10 	  	5 	 
+Successeur 	15 	20 	  	10 	15 	15 	  	10 	5
+Lord (A) 	10 	10 	  	25 	10 	10 	  	5 	 
+Tireur d’elite 	10 	10 	  	30 	10 	15 	5 	5 	 
+Wing Tamer (I) 	5 	  	20 	  	  	10 	20 	  	 
+Lindwurm 	5 	  	25 	5 	  	15 	25 	  	 
+Wing Tamer (H) 	  	  	15 	10 	10 	  	25 	10 	 
+Sleipnir Rider 	  	  	20 	15 	15 	  	30 	15 	 
+Sentinel (T) 	10 	10 	  	10 	5 	20 	  	5 	 
+Picket 	10 	15 	  	10 	10 	20 	5 	5 	5
+Sentinel (F)	10 	5 	  	15 	15 	5 	15 	  	 
+Cupido 	10 	5 	5 	20 	20 	5 	20 	  	 
+Sword Fighter 	10 	10 	  	15 	20 	  	15 	10 	 
+Swordmaster 	10 	10 	  	15 	20 	  	15 	15 	 
+Hero 	15 	15 	  	10 	15 	  	10 	15 	 
+Lance Fighter 	10 	10 	5 	20 	5 	10 	5 	  	 
+Halberdier 	10 	15 	5 	20 	10 	15 	5 	5 	 
+Royal Knight 	5 	10 	15 	15 	15 	5 	20 	10 	 
+Axe Fighter 	25 	20 	  	5 	10 	5 	  	  	5
+Berserker 	30 	30 	  	5 	10 	5 	  	  	10
+Warrior 	25 	20 	  	10 	15 	10 	5 	  	5
+Archer 	10 	15 	  	25 	10 	5 	  	5 	 
+Sniper 	15 	15 	  	30 	10 	10 	  	10 	 
+Bow Knight 	10 	10 	  	20 	20 	  	15 	15 	 
+Sword Armor 	20 	15 	  	10 	  	30 	  	  	5
+Lance Armor 	20 	15 	  	10 	  	30 	  	  	5
+Axe Armor 	20 	15 	  	10 	  	30 	  	  	5
+General 	25 	20 	  	10 	  	30 	  	  	10
+Great Knight 	20 	15 	  	15 	  	25 	10 	5 	5
+Sword Cavalier 	10 	10 	  	10 	10 	10 	10 	10 	 
+Lance Cavalier 	10 	10 	  	10 	10 	10 	10 	10 	 
+Axe Cavalier 	10 	10 	  	10 	10 	10 	10 	10 	 
+Paladin 	15 	15 	  	10 	15 	15 	15 	10 	 
+Wolf Knight 	10 	5 	  	15 	20 	5 	20 	20 	 
+Mage 	  	  	25 	5 	  	  	25 	5 	 
+Sage 	  	  	30 	5 	  	  	30 	15 	 
+Mage Knight 	5 	5 	25 	  	5 	10 	25 	5 	 
+Martial Monk 	  	10 	25 	  	  	10 	20 	10 	 
+Martial Master 	5 	10 	20 	  	  	15 	25 	10 	 
+High Priest 	  	  	25 	  	5 	  	30 	30 	 
+Sword Flier 	5 	10 	5 	10 	10 	  	10 	10 	 
+Lance Flier 	5 	10 	5 	10 	10 	  	10 	10 	 
+Axe Flier 	5 	10 	5 	10 	10 	  	10 	10 	 
+Griffin Knight 	  	10 	15 	15 	20 	  	15 	15 	 
+Wyvern Knight 	20 	20 	  	10 	5 	20 	5 	5 	5
+Thief 	5 	10 	  	20 	15 	15 	5 	15 	 
+Dancer 	5 	10 	  	5 	15 	10 	20 	20 	 

@@ -1,0 +1,82 @@
+
+
+##functions
+single_sim = function(fe_char,class_path,level_classchange,final_level){
+
+	p_growth = char_growth[char_growth$Name == fe_char,-1]
+	start_vals = char_base[char_base$Name == fe_char,]
+	att_run = unlist(start_vals[,4:12] - class_base[class_base$Name == start_vals$Class,2:10])
+	
+	##how many level ups are gained before class change?
+	full_class_path = c(start_vals$Class,class_path)
+	##some issues here with no class path
+	if(length(full_class_path) == 1){
+		levelups_per_class = final_level - start_vals$Level
+	}else{
+		levelups_per_class = c(level_classchange[1] - start_vals$Level, level_classchange[-1] - 1, final_level - 1)
+	}
+
+	att_path = matrix(nrow = sum(levelups_per_class)+1, ncol = 9)
+	
+	##irow will provide index of start of each block
+	irow = cumsum(c(1,levelups_per_class)) + 1
+	##j will cycle over levelups per class
+	att_path[1,] = att_run
+	
+	for(j in 1:length(levelups_per_class)){
+		if(levelups_per_class[j] > 0){
+			growth_run = unlist(p_growth + 
+				ifelse(fe_char == "Jean",2,1)*class_growth[class_growth$Name == full_class_path[j],-1])/100
+			##figure out what the caps are when scaled to personal unit att values
+			caps = unlist(class_max[class_max$Name == full_class_path[j],-1] + 
+				c(0,char_max[char_max$Name == fe_char,-1],0) -
+				class_base[class_base$Name == full_class_path[j],-c(1,11)])
+			att_block = mapply(function(gr,ar,cap){
+				if(gr > 1){
+					gr = gr - 1
+					add_one = 1
+				}else{
+					add_one = 0
+				}
+				att_up = rbinom(levelups_per_class[j], 1, gr) + add_one
+				single_att = cumsum(att_up) + ar
+				out = ifelse(single_att > cap,max(cap,ar),single_att)
+				return(out)
+			}, growth_run, att_run, caps)
+			att_path[irow[j]:(irow[j+1]-1),] = att_block
+
+			##was having an issue with tail when levelups_per_class was 1, since att_block became a vec, not mat
+			if(levelups_per_class[j] == 1){
+				att_run = att_block
+			}else{
+				att_run = tail(att_block,1)
+			}
+		}
+	}
+	colnames(att_path) = c("hp","str","mag","dex","spd","def","res","lck","bld")
+	return(att_path)
+}
+
+
+##function for building plots
+att_ggplot = function(att,quant_set,mean_tf,cap_tf,coi_cap,coi_base,pers_val_tf,att_name,att_comp,comp_base){
+
+	if(pers_val_tf == FALSE){ att_df = as.data.frame(ifelse(att > coi_cap, coi_cap, att))
+	}else{att_df = as.data.frame(att)}
+
+	ggplot(data=att_df,aes(att_df[,1])) + 
+		{if(cap_tf == TRUE)
+			annotate("rect", xmin=coi_cap -.5, xmax = coi_cap +.5, ymin=-Inf, ymax=Inf, alpha=0.4, fill="green") 
+		} +
+		geom_bar(aes(y = after_stat(prop))) + ylim(0,1) + labs(x = att_name) +
+		{if(mean_tf == TRUE)
+			geom_vline(xintercept = mean(att_df[,1]), color="red", linewidth = 2, alpha = .4 )
+		} +
+		{if(!is.null(quant_set))
+			geom_vline(xintercept = quantile(att_df[,1],quant_set), color="blue", alpha=.6, linewidth=1.5, lty=2 )
+		} +
+		{if(!is.null(att_comp))
+			geom_vline(xintercept = unlist(att_comp - comp_base + coi_base), color="black", alpha=.5, linewidth=2)
+		}
+}
+

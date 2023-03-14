@@ -1,0 +1,272 @@
+
+##trying to troubleshoot the shiny code with line by line compiling in base R
+##all user specified "input" e.g. input$char_oi, will be substitue input$ with in_, e.g. in_char_oi
+##to deal with reactive objects (really functions that evaluate whenever a change occurs),
+##will write them as functions and create an object afterwards denoted with _R
+## so spots in code that ask for (in shiny) e.g. "paste(coi_caps())" becomes "paste(coi_caps_R)"
+##where coi_caps_R = coi_caps()
+
+
+
+library(ggplot2)
+library(DT)
+
+setwd("~/engage_calc")
+source("functions_engage_calc.txt", local = TRUE)
+char_base = read.table("char_base.txt", sep="\t", header=TRUE, strip.white=TRUE)
+char_growth = read.table("char_growth.txt", sep="\t", header=TRUE, strip.white=TRUE)
+char_max = read.table("char_max.txt", sep="\t", header=TRUE, strip.white=TRUE)
+char_max[is.na(char_max)] = 0
+class_base = read.table("class_base.txt", sep="\t", header=TRUE, strip.white=TRUE)
+class_growth = read.table("class_growth.txt", sep="\t", header=TRUE, strip.white=TRUE)
+class_growth[is.na(class_growth)] = 0
+class_max = read.table("class_max.txt", sep="\t", header=TRUE, strip.white=TRUE)
+att_names = c("hp","str","mag","dex","spd","def","res","lck","bld")
+
+
+
+
+in_med_TF = TRUE
+in_custom_q_TF = TRUE
+in_custom_q = .05
+in_mean_TF = TRUE
+in_cap_TF = FALSE
+in_trunc_val_TF = FALSE
+
+in_make_comp = TRUE
+in_problemchild = "Swordmaster"
+in_att_cc_hp = 30
+in_att_cc_str = 10
+in_att_cc_mag = 10
+in_att_cc_dex = 10
+in_att_cc_spd = 10
+in_att_cc_def = 10
+in_att_cc_res = 10
+in_att_cc_lck = 10
+in_att_cc_bld = 10
+
+
+
+in_char_oi = "Lapis"
+in_class_1 = "hero"
+in_cclvl_1 = 11
+in_class_2 = "swordmaster"
+in_cclvl_2 = 10
+in_class_3 = "none"
+in_cclvl_3 = 10
+in_class_4 = "none"
+in_cclvl_4 = 10
+in_class_5 = "none"
+in_cclvl_5 = 10
+
+
+in_flvl = 15
+in_class_oi = "Hero"
+in_Nsims = 10
+
+
+
+
+  class_path = function(){
+    icv = c(in_class_1,in_class_2,in_class_3,in_class_4,in_class_5)
+    icv[icv != "none"]
+  }
+class_path_R = class_path()
+print(class_path_R)
+
+  level_class_change = function(){
+    c(in_cclvl_1,in_cclvl_2,in_cclvl_3,in_cclvl_4,in_cclvl_5)[seq_len(length(class_path_R))]
+  }
+level_class_change_R = level_class_change()
+print(level_class_change_R)
+
+################################################################################
+
+  class_path_df_old = function(){
+    data.frame(
+      "class" = c(char_base$Class[char_base$Name == in_char_oi],class_path_R),
+      "level" = c(char_base$Level[char_base$Name == in_char_oi],level_class_change_R)
+    )
+  }
+class_path_df_old_R = class_path_df_old()
+print(class_path_df_old_R)  
+
+  
+
+  class_path_df = function(){
+    data.frame(
+      "class" = c(char_base$Class[char_base$Name == in_char_oi],class_path_R),
+      "level_start" = as.integer(c(char_base$Level[char_base$Name == in_char_oi], 
+        rep(1, length(level_class_change_R) ))),
+      "level_end" = c(level_class_change_R, in_flvl)
+    )
+  }
+class_path_df_R = class_path_df()
+print(class_path_df_R)
+
+
+
+
+
+
+
+
+
+################################################################################
+  
+  
+  tst = function(){
+    srobj = lapply(1:in_Nsims, function(i){
+      single_sim(
+        in_char_oi,class_path_R,level_class_change_R,in_flvl
+      )
+    })
+    srobj
+  }
+tst_R = tst()
+##notice tst_R is values without any class bases applied
+    
+  finalres = function(){
+    do.call(rbind,lapply(tst_R,function(st){ tail(st,1) }))
+  }
+finalres_R = finalres()
+head(finalres_R)
+##should be same format as tst
+
+  coi_bases = function(){
+    class_base[class_base$Name == in_class_oi,-c(1,11)]
+  }
+coi_bases_R = coi_bases()
+print(coi_bases_R)
+
+  coi_caps = function(){
+    unlist(class_max[class_max$Name == in_class_oi,-1] +
+                        c(0,char_max[char_max$Name == in_char_oi,-1],0) )
+  }
+coi_caps_R = coi_caps()
+print(coi_caps_R)
+
+
+#################################################################################################
+#################################################################################################
+#################################################################################################
+  ggdfr = function(){
+    ##before putting it into a data.frame for ggplot, lets also adjust for class of interest bases
+    ggdf = as.data.frame(
+	matrix(mapply('+', finalres_R, matrix(rep(coi_bases_R,in_Nsims),ncol=9,byrow=TRUE)),
+	ncol=9))
+    #ggdf = as.data.frame(do.call(rbind,lapply(finalres_R,function(frl){ frl + coi_bases_R})))
+    rownames(ggdf) = NULL
+    colnames(ggdf) = att_names
+    return(ggdf)
+  }
+ggdfr_R =ggdfr()
+head(ggdfr_R)
+##this one should have class bases applied
+  
+##start adding in the new input params?
+  quants = function(){
+    if(in_med_TF == TRUE | in_custom_q_TF == TRUE){
+      if(in_med_TF == TRUE){
+        med = .5
+      }else{
+        med = NULL
+      }
+      if(in_custom_q_TF == TRUE){
+        otherq = in_custom_q
+      }else{
+        otherq = NULL
+      }
+      quants_out = c(med,otherq)
+    }else{
+      quants_out = NULL
+    }
+    quants_out
+  }
+quants_R = quants()
+print(quants_R)
+
+##start adding in comparison parameters, att_cc was renamed problemchild
+  comp_bases = function(){
+    if(in_make_comp == TRUE){
+      rout = class_base[class_base$Name == in_problemchild, -c(1,11)]
+    }else{
+      rout = rep("danger", 9)
+    }
+    rout
+  }
+comp_bases_R = comp_bases()
+print(comp_bases_R)
+   
+  att_comps = function(){
+    if(in_make_comp == TRUE){
+      rout = c(in_att_cc_hp,in_att_cc_str,in_att_cc_mag,
+		in_att_cc_dex,in_att_cc_spd,in_att_cc_def,
+		in_att_cc_res,in_att_cc_lck,in_att_cc_bld)
+    }else{
+      rout = rep(NULL,9)
+    }
+    rout
+  }
+att_comps_R = att_comps()
+print(att_comps_R)
+  
+##now for percentiles
+  att_comps_percentiles = function(){
+    ##caution, ac_vec is giving the values user input in term of comp_class
+    ##so need to convert them to same scale as class of interest
+    ac_vec = att_comps_R - comp_bases_R + coi_bases_R
+    perc = mapply( function(acv,simout){ mean(simout <= acv) }, 
+      acv = as.list(ac_vec), simout = as.list(ggdfr_R)
+    )
+    rout = data.frame(att_names, "percentiles" = perc)
+    rownames(rout) = NULL
+    colnames(rout) = c("Attribute", "Percentile")
+    rout
+  }
+att_comps_percentiles_R = att_comps_percentiles()
+print(att_comps_percentiles_R)
+  
+
+
+
+    
+  ggfeed = function(){
+    lapply(1:9, function(i){
+      list(att = ggdfr_R[,i], quant_set = quants_R, mean_tf = in_mean_TF, cap_tf = in_cap_TF,
+		coi_cap = coi_caps_R[i], coi_base =coi_bases_R[i], pers_val_tf = !in_trunc_val_TF,
+		att_name = att_names[i], att_comp = att_comps_R[i], comp_base = comp_bases_R[i]
+      )
+    })
+  }
+ggfeed_R = ggfeed()
+
+  ggplotlist = function(){
+    lapply(ggfeed_R,function(gg){
+      att_ggplot(
+        att = gg$att,
+        quant_set = gg$quant_set,
+        mean_tf = gg$mean_tf,
+        cap_tf = gg$cap_tf,
+        coi_cap = gg$coi_cap,
+        coi_base = gg$coi_base,
+        pers_val_tf = gg$pers_val_tf,
+        att_name = gg$att_name,
+        att_comp = gg$att_comp,
+        comp_base = gg$comp_base
+      )
+    })
+  }
+ggplotlist_R = ggplotlist()
+  
+gridExtra::grid.arrange(grobs=ggplotlist_R,nrow = 3)
+  # ##standard errors, quite small at N = 1000, kinda large at N = 100 -> 
+  # apply(ggdf,2,sd)/sqrt(nrow(ggdf)-1)
+  # 
+
+
+
+
+
+
+

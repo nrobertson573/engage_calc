@@ -1,0 +1,37 @@
+Name 	Str 	Mag 	Dex 	Spd 	Def 	Res 	Lck
+Alear 	1 		1 	1 			
+Vander 	1 	-1 	1 	-2 	3 	-2 	
+Clanne 	1 	-1 	2 	2 	-2 	-1 	
+Framme 		1 	-1 	2 	-1 	-1 	1
+Alfred 	2 	-1 	1 		2 	-2 	-1
+Etie 	2 	-2 	2 			-1 	-1
+Boucheron 	1 		2 	2 	-2 		-2
+Celine 	-2 	2 	-2 	1 	-3 	1 	3
+Chloe 	-2 	1 		3 	-1 		
+Louis 	1 		-1 	-2 	3 	-2 	1
+Yunaka 	-1 		1 	2 	-2 	2 	-1
+Alcryst 	1 	-1 	3 		1 	-2 	-1
+Citrinne 	-1 	3 		-1 	-2 	2 	
+Lapis 	-2 	-2 	2 	3 			
+Diamant 	2 	-1 	-1 		2 	-1 	
+Amber 	2 	-1 	-1 	-1 	1 	-1 	1
+Jade 	1 	-1 			2 		-1
+Ivy 		2 	-2 		2 	2 	-3
+Kagetsu 	-1 	-1 	2 	2 		-2 	1
+Zelkov 		-1 	2 			-1 	1
+Fogado 	-1 	-1 		3 	-1 	1 	
+Pandreo 	-3 	2 		-1 	-2 	3 	2
+Bunet 	1 	-3 	1 		2 	-1 	1
+Timerra 	-1 	-1 	3 		2 	-3 	1
+Panette 	3 	-1 				-1 	
+Merrin 	-1 	-1 	1 	2 	-1 		1
+Hortensia 	-2 			1 	-3 	3 	2
+Seadall 		-2 	-1 	2 			2
+Rosado 	3 	-2 	1 		1 	-2 	
+Goldmary 	1 	-3 			2 	-1 	2
+Lindon 		2 	-1 		-2 	2 	
+Saphir 	2 	-2 		1 	1 	-2 	
+Veyle 		3 		-1 		3 	-2
+Mauvier 	1 	2 	1 	-2 	1 	1 	-2
+Anna 		1 	1 	1 	-2 	-1 	1
+Jean 		2 	-1 	-1 			1
